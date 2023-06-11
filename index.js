@@ -1,5 +1,6 @@
 const inquirer = require('inquirer');
 const db = require('./connection.js');
+const table = require('console.table');
 
 db.connect(err => {
     if (err) throw err;
@@ -28,32 +29,29 @@ function options() {
         })
         .then((res) => { 
             switch(res.userChoice) {
-                case 'View All Employees';
+                case 'View All Employees':
                     viewEmployees();
                     break;
-                case 'Add Employee';
+                case 'Add Employee':
                     //add employee func
                     break;
-                case 'Update Employee Role';
+                case 'Update Employee Role':
                     //update employee role func
                     break;
-                case 'View All Roles';
-                    //view all roles func
+                case 'View All Roles':
+                    viewAllRoles();
                     break;
-                case 'Add Role';
+                case 'Add Role':
                     //add role func
                     break;
-                case 'View All departments';
-                    //View all Dept func
+                case 'View All Departments':
+                    viewAllDepartments();
                     break;
-                case 'Add Department';
-                    //Add dept func
+                case 'Add Department':
+                    addDepartment();
                     break;
-                case 'Quit';
-                    //Quit func
-                    break;
-                case 'View All Employees';
-                    //View all Employees func
+                case 'Quit':
+                    db.end();
                     break;
             }
         }).catch((err) => {
@@ -62,7 +60,7 @@ function options() {
 }
 
 function viewEmployees() {
-    let query =`SELECT 
+    let query = `SELECT 
         employee.id, 
         employee.first_name, 
         employee.last_name, 
@@ -78,12 +76,67 @@ function viewEmployees() {
     LEFT JOIN employee manager
         ON manager.id = employee.manager_id`;
     
-    connection.query(query, (err, res) => {
+    db.query(query, (err, res) => {
         if(err) throw err;
         console.table(res)
-    })
+        options();
+    });
 }
-//switch statement for the different screnarios
+
+// function addEmployee() {
+
+// }
+
+// function updateEmployeeRole() {
+
+// }
+
+function viewAllRoles() {
+    let query = `SELECT 
+    role.id,
+    role.title,
+    role.salary,
+    department.name AS department
+ FROM role LEFT JOIN department 
+ ON department.id = role.department_id;`
+ db.query(query, (err, res) => {
+    if(err) throw err;
+    console.table(res)
+    options();
+});
+}
+
+// function addRole() {
+
+// }
+
+function viewAllDepartments() {
+    let query = `SELECT 
+    department.id,
+    department.name AS department
+    FROM department;`
+ db.query(query, (err, res) => {
+    if(err) throw err;
+    console.table(res)
+    options();
+});
+}
+
+function addDepartment() {
+    inquirer
+        .prompt({
+            type: 'input',
+            name: 'newDepartment',
+            message: 'What is the name of the department?'
+        })
+        .then((res) => {
+            let query = `INSERT INTO department SET ?`
+            db.query(query, {name: res.newDepartment}, (err, res) => {
+                if(err) throw err;
+                options();
+            });
+        });
+}
 
 
 
