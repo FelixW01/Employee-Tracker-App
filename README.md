@@ -1,5 +1,7 @@
  # Employee Tracker App
-  https://github.com/FelixW01/employee-tracker-app 
+  https://github.com/FelixW01/employee-tracker-app
+ # Walkthrough Demo Link
+ https://drive.google.com/file/d/1FYvAF9ixArLF1dSHa-PwVpn5DLcbdX3s/view?usp=sharing
   # Description
   This application was built to answer the need for an easier way to input and query data from a workplace database.
   # Table of Contents
